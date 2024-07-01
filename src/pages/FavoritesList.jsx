@@ -10,16 +10,22 @@ const FavoritesList = () => {
     const favoritesProducts = getFavoriteProducts();
 
     return (
-        <section className="favorites">
-            <div className="container mx-auto px-4">
-                <h3 className="flex mb-3">Сохраненные ранее товары</h3>
+        <section className="favorites min-h-72">
+            <div className="max-w-7xl mx-auto px-2">
                 <Link
                     to="/cards"
                     className=" text-indigo-500 hover:text-indigo-600 border-b-2 border-b-indigo-500 mb-8 inline-flex"
                 >
                     Вернуться карточкам
                 </Link>
-                <div className="flex flex-wrap justify-between">
+
+                <h2 className="mb-4 text-4xl font-bold">
+                    {favoritesProducts?.length
+                        ? "Сохраненные ранее товары."
+                        : "У вас нет сохраненных товаров."}
+                </h2>
+
+                <div className="flex flex-wrap gap-5">
                     {!!favoritesProducts &&
                         favoritesProducts.map((product) => (
                             <Card
