@@ -1,13 +1,21 @@
 import { Card } from "../components/ui/Card/Card.jsx";
 import useProductsStore from "../store/useProductsStore.js";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const FavoritesList = () => {
+    // хук для роутинга
+    const navigate = useNavigate();
+
     // Достаем функцию для работы с сохраненками
     const { getFavoriteProducts, setFavorite } = useProductsStore();
 
     // Вызываем функцию для получения сохраненок
     const favoritesProducts = getFavoriteProducts();
+
+    // Обработчик клика по карточке
+    const handleCardClick = (id) => {
+        navigate(`/cards/${id}`);
+    };
 
     return (
         <section className="favorites min-h-72">
@@ -31,6 +39,7 @@ const FavoritesList = () => {
                             <Card
                                 key={product?.id}
                                 details={product}
+                                onCardClick={handleCardClick}
                                 onToggleFavorite={setFavorite}
                             />
                         ))}
