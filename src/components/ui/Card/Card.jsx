@@ -53,7 +53,7 @@ export const Card = (props) => {
   return (
     <div
       onClick={handleCardClick}
-      className="max-w-sm md:max-w-sm lg:max-w-sm rounded-md overflow-hidden shadow-md hover:shadow-lg mb-8 cursor-pointer"
+      className="max-w-72 rounded-md overflow-hidden shadow-md hover:shadow-lg mb-1 cursor-pointer"
     >
       <div className="relative">
         <img className="w-full max-h-44" src={imgSrc} alt={title} />

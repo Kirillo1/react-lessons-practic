@@ -1,27 +1,36 @@
 import { useParams } from "react-router-dom";
-import useProductsStore from "../store/useProductsStore.js";
+import useProductsStore from "../store/useProductsStore";
 import { Link } from "react-router-dom";
 
 const CardDetail = () => {
+    // Получение id из адресной строки через React-router-dom
     const { id } = useParams();
 
     // Стор для работы с продуктами
-    const { products, setFavorite } = useProductsStore();
+    const { getProductById, setFavorite } = useProductsStore();
 
     // Находим карточку по id.
-    const product = products?.find((product) => product?.id === id);
+    const product = getProductById(id);
 
     return (
         <section className="card-details">
-            <div className="container mx-auto p-4">
+            <div className="max-w-7xl mx-auto px-2">
                 <Link
                     to="/cards"
-                    className=" text-indigo-500 hover:text-indigo-600 border-b-2 border-b-indigo-500 mb-8 inline-flex"
+                    className="inline-flex text-indigo-500 hover:text-indigo-600 border-b-2 border-b-indigo-500 mb-8"
                 >
                     Вернуться назад
                 </Link>
+                <h2 className="mb-4 text-4xl font-bold">{product?.name}</h2>
                 <div className="max-w-md rounded shadow-lg relative">
-                    <img className="w-full " src={product?.imgSrc} alt={product?.title} />
+                    <div className="relative">
+                        <div className="absolute inset-0 bg-black opacity-30 rounded"></div>
+                        <img
+                            className="w-full rounded"
+                            src={product?.imgSrc}
+                            alt={product?.title}
+                        />
+                    </div>
 
                     <button
                         className={`absolute top-0 left-0 m-2 p-2 rounded-full ${product?.isFavorite ? "text-indigo-500" : "text-white"
@@ -37,7 +46,6 @@ const CardDetail = () => {
                         </svg>
                     </button>
                     <div className="px-6 py-4">
-                        <div className="font-bold text-xl mb-2">{product?.title}</div>
                         <p className="text-gray-600 text-sm mb-2">{product?.description}</p>
                         <p className="text-gray-600 text-sm mb-2">{product?.category}</p>
                         {product?.rating && (
