@@ -1,21 +1,25 @@
-import { Card } from "../components/ui/Card/Card.jsx";
-import useProductsStore from "../store/useProductsStore.js";
+import { useState } from "react";
+import Alert from "../components/ui/Alert/Alert";
+import { Card } from "../components/ui/Card/Card";
+import useProductsStore from "../store/useProductsStore";
 import { Link, useNavigate } from "react-router-dom";
 
 const FavoritesList = () => {
-    // хук для роутинга
-    const navigate = useNavigate();
+    const navigate = useNavigate(); // хук для роутинга
 
     // Достаем функцию для работы с сохраненками
     const { getFavoriteProducts, setFavorite } = useProductsStore();
 
-    // Вызываем функцию для получения сохраненок
+    // Вызываем функцию для показа сохраненок
     const favoritesProducts = getFavoriteProducts();
 
     // Обработчик клика по карточке
     const handleCardClick = (id) => {
         navigate(`/cards/${id}`);
     };
+
+    // Стейт для скрытия/показа компонента Alert
+    const [isShowAlert, setShowAlert] = useState(false);
 
     return (
         <section className="favorites min-h-72">
@@ -33,11 +37,18 @@ const FavoritesList = () => {
                         : "У вас нет сохраненных товаров."}
                 </h2>
 
-                <div className="flex flex-wrap gap-5">
-                    {!!favoritesProducts &&
+                <button onClick={() => setShowAlert(true)}>Показать Alert</button>
+
+                <Alert isOpen={isShowAlert} variant="success">
+                    <h2>Заголовок 1</h2>
+                    <p>Текст с описанием</p>
+                </Alert>
+
+                <div className="flex flex-wrap gap-9">
+                    {favoritesProducts?.length > 0 &&
                         favoritesProducts.map((product) => (
                             <Card
-                                key={product?.id}
+                                key={product.id}
                                 details={product}
                                 onCardClick={handleCardClick}
                                 onToggleFavorite={setFavorite}
