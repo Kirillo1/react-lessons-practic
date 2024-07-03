@@ -1,9 +1,11 @@
+import Image from "../Image/Image";
+
 /**
  * Компонент карточка.
  * @param {object} props - Свойства компонента.
  * @param {object} props.details - Детали карточки.
  * @param {string} props.details.id - Идентификатор карточки.
- * @param {string} props.details.title - Название карточки.
+ * @param {string} props.details.name - Название карточки.
  * @param {string} props.details.category - Категория карточки (необязательно).
  * @param {string} props.details.description - Описание карточки (необязательно).
  * @param {string} [props.details.price] - Цена карточки (необязательно).
@@ -16,7 +18,7 @@
 export const Card = (props) => {
   const {
     id,
-    title,
+    name,
     category,
     description,
     price,
@@ -25,29 +27,18 @@ export const Card = (props) => {
     isFavorite,
   } = props.details;
 
-  const { onCardClick, onToggleFavorite } = props;
-
+  const { onCardClick, onHeartClick } = props;
 
   // Обработчик клика на иконку сердечка
   const handleFavorite = (event) => {
     event.stopPropagation(); // Предотвр. всплытие события
 
-    if (onToggleFavorite) {
-      onToggleFavorite(id);
-    }
+    onHeartClick && onHeartClick(id);
   };
 
   // Обработчик клика по карточке
-  // const handleCardClick = () => {
-  //   onCardClick && onCardClick(id); // ?? Клик все равно срабатывает
-  //   console.log('Клик выполнен!')
-  // };
-
-  // Обработчик клика по карточке
   const handleCardClick = () => {
-    if (onCardClick) {
-      onCardClick(id);
-    }
+    onCardClick && onCardClick(id);
   };
 
   return (
@@ -56,7 +47,12 @@ export const Card = (props) => {
       className="max-w-72 rounded-md overflow-hidden shadow-md hover:shadow-lg mb-1 cursor-pointer"
     >
       <div className="relative">
-        <img className="w-full max-h-44" src={imgSrc} alt={title} />
+        <Image
+          className="w-full max-h-44"
+          isCritical={true}
+          src={imgSrc}
+          alt={name}
+        />
         <div className="absolute top-0 left-0 w-full h-full bg-black opacity-30 transition-opacity duration-300 hover:opacity-50"></div>
         {price && (
           <div className="absolute top-0 right-0 bg-indigo-500 text-white px-2 py-1 m-2 rounded-md text-sm font-normal">
@@ -78,7 +74,7 @@ export const Card = (props) => {
         </button>
       </div>
       <div className="p-4">
-        <h3 className="text-lg font-medium mb-2">{title}</h3>
+        <h3 className="text-lg font-medium mb-2 text-zinc-800">{name}</h3>
         {description && (
           <p className="text-gray-600 text-sm mb-4">{description}</p>
         )}
@@ -90,7 +86,7 @@ export const Card = (props) => {
           </div>
         )}
         <div className="flex items-center justify-between">
-          <span className="font-bold text-lg">{price}$</span>
+          <span className="font-bold text-md text-zinc-800">{price}$</span>
         </div>
       </div>
     </div>
