@@ -7,6 +7,8 @@ const TodoForm = () => {
     const [taskName, setTaskName] = useState("");
     const [taskInfo, setTaskInfo] = useState("");
     const [tasks, setTasks] = useState([]);
+    const [editingTask, setEditingTask] = useState(null); // Состояние для редактируемой задачи
+
 
     // Обработчик изменения значения в инпуте для имени задачи
     const handleNameChange = (event) => {
@@ -22,7 +24,16 @@ const TodoForm = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
         if (taskName.trim() && taskInfo.trim()) {
-            setTasks([...tasks, { id: crypto.randomUUID(), name: taskName, info: taskInfo }]);
+            if (editingTask) {
+                // Если редактируется задача, обновляем её
+                setTasks(tasks.map(task =>
+                    task.id === editingTask.id ? { ...task, name: taskName, info: taskInfo } : task
+                ));
+                setEditingTask(null); // Сброс редактируемой задачи
+            } else {
+                // Если это новая задача, добавляем её
+                setTasks([...tasks, { id: crypto.randomUUID(), name: taskName, info: taskInfo }]);
+            }
             setTaskName(""); // Очистка поля ввода после добавления задачи
             setTaskInfo(""); // Очистка поля ввода после добавления задачи
         }
@@ -31,6 +42,13 @@ const TodoForm = () => {
     // Обработчик для удаления задачи по Id
     const deleteTodo = (id) => {
         setTasks(tasks.filter(task => task.id !== id));
+    };
+
+    // Обработчик для редактирования задачи по Id
+    const editTodo = (task) => {
+        setEditingTask(task);
+        setTaskName(task.name);
+        setTaskInfo(task.info);
     };
 
     return (
@@ -70,11 +88,11 @@ const TodoForm = () => {
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                     type="submit"
                 >
-                    Add task
+                    {editingTask ? "Update task" : "Add task"}                
                 </button>
             </form>
 
-            <TodoList toDos={tasks} deleteTodo={deleteTodo} />
+            <TodoList toDos={ tasks } deleteTodo={ deleteTodo } editTodo={ editTodo } />
         </div>
     );
 };
