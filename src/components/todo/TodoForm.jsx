@@ -28,6 +28,11 @@ const TodoForm = () => {
         }
     };
 
+    // Обработчик для удаления задачи по Id
+    const deleteTodo = (id) => {
+        setTasks(tasks.filter(task => task.id !== id));
+    };
+
     return (
         <div className="w-full max-w-xs">
             <form onSubmit={handleSubmit}>
@@ -69,7 +74,7 @@ const TodoForm = () => {
                 </button>
             </form>
 
-            <TodoList toDos={tasks} />
+            <TodoList toDos={tasks} deleteTodo={deleteTodo} />
         </div>
     );
 };
